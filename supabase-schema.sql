@@ -105,8 +105,8 @@ grant execute on function public.cancel_order(uuid) to authenticated;
 revoke all on function public.admin_list_orders() from public;
 grant execute on function public.admin_list_orders() to authenticated;
 insert into public.products(brand,name,description,price,stock) values
-('Jean Paul Gaultier','Scandal','Eau de Toilette',2300,0),
-('Dolce & Gabbana','Light Blue','Eau de Toilette',1950,0),
-('Ariana Grande','Cloud Pink','Eau de Parfum',1390,0),
-('Giorgio Armani','Stronger With You','Eau de Toilette',2100,0)
+('Jean Paul Gaultier','Scandal','Eau de Toilette',2300,1),
+('Dolce & Gabbana','Light Blue','Eau de Toilette',1950,1),
+('Ariana Grande','Cloud Pink','Eau de Parfum',1390,1),
+('Giorgio Armani','Stronger With You','Eau de Toilette',2100,1)
 on conflict do nothing;
