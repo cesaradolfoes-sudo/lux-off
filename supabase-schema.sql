@@ -105,10 +105,8 @@ grant execute on function public.cancel_order(uuid) to authenticated;
 revoke all on function public.admin_list_orders() from public;
 grant execute on function public.admin_list_orders() to authenticated;
 insert into public.products(brand,name,description,price,stock) values
-('Versace','Eros Flame','Cítrico especiado con fondo cálido.',1850,3),
-('Nautica','Voyage','Fresco, acuático y versátil.',850,5),
-('Armaf','Club de Nuit Intense Man','Cítrico, amaderado y de carácter intenso.',1450,4),
-('Dior','Sauvage EDT','Fresco, especiado y amaderado.',2450,2),
-('Jean Paul Gaultier','Le Male Le Parfum','Ámbar, vainilla y notas especiadas.',2850,2),
-('Ferrari','Scuderia Ferrari Black','Aromático, especiado y amaderado.',790,4)
+('Jean Paul Gaultier','Scandal','Eau de Toilette',2300,0),
+('Dolce & Gabbana','Light Blue','Eau de Toilette',1950,0),
+('Ariana Grande','Cloud Pink','Eau de Parfum',1390,0),
+('Giorgio Armani','Stronger With You','Eau de Toilette',2100,0)
 on conflict do nothing;
