@@ -28,13 +28,13 @@ function render(){
  let q=$("#search").value.toLowerCase(),b=$("#brandFilter").value;
  let list=demoProducts.filter(p=>(p.name+" "+p.brand).toLowerCase().includes(q)&&(!b||p.brand===b));
  const safe=v=>String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
- const detail=(desc,label)=>{const m=String(desc||"").match(new RegExp("(?:^|\\.\\s*)"+label+"\\s*:\\s*([^.]*(?:\\.[^.]*)?)","i"));return m?m[1].trim():""};
+ const detail=(desc,label)=>{const m=String(desc||"").match(new RegExp("(?:^|\.\s*)"+label+"\s*:\s*([^.]*(?:\.[^.]*)?)","i"));return m?m[1].trim():""};
  $("#products").innerHTML=list.map(p=>{
   const desc=String(p.description||"");
-  const family=(desc.match(/Familia olfativa:\\s*([^.]*)/i)||[])[1]||"Fragancia seleccionada";
-  const salida=(desc.match(/Salida:\\s*([^.]*)/i)||[])[1]||"";
-  const corazon=(desc.match(/Corazón:\\s*([^.]*)/i)||[])[1]||"";
-  const fondo=(desc.match(/Fondo:\\s*([^.]*)/i)||[])[1]||"";
+  const family=(desc.match(/Familia olfativa:\s*([^.]*)/i)||[])[1]||"Fragancia seleccionada";
+  const salida=(desc.match(/Salida:\s*([^.]*)/i)||[])[1]||"";
+  const corazon=(desc.match(/Corazón:\s*([^.]*)/i)||[])[1]||"";
+  const fondo=(desc.match(/Fondo:\s*([^.]*)/i)||[])[1]||"";
   const notes=[["Salida",salida],["Corazón",corazon],["Fondo",fondo]].filter(x=>x[1]);
   return '<article class="card"><div class="photo"><img class="product-img" src="'+safe(p.image||"")+'" alt="Frasco de '+safe(p.name)+'" loading="lazy" onerror="this.remove()"></div><div class="info"><div class="brand">'+safe(p.brand)+'</div><h3>'+safe(p.name)+'</h3><span class="concentration">'+safe(p.concentration||"Concentración no indicada")+'</span><div class="family">'+safe(family)+'</div><div class="notes">'+(notes.length?notes.map(n=>'<div class="note-row"><strong>'+n[0]+':</strong> '+safe(n[1])+'</div>').join(""):'<div class="note-row">Consulta la descripción para conocer esta fragancia.</div>')+'</div><div class="bottom"><div><div class="price">'+money(p.price)+'</div><div class="stock '+(p.stock<1?'out':p.stock<=2?'low':'')+'">'+(p.stock>0?'Disponible: '+p.stock:'Agotado')+'</div></div><button class="btn" '+(p.stock<1?'disabled':'')+' onclick="add('+p.id+')">Agregar al carrito</button></div></div></article>'
  }).join("")||'<p class="muted">No encontramos perfumes con esa búsqueda.</p>';
