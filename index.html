@@ -32,7 +32,7 @@ function render(){
  const detail=(desc,label)=>{const m=String(desc||"").match(new RegExp("(?:^|\.\s*)"+label+"\s*:\s*([^.]*(?:\.[^.]*)?)","i"));return m?m[1].trim():""};
  $("#products").innerHTML=list.map(p=>{
   const savedDesc=String(p.description||"");
-  const desc=(!savedDesc.trim()||/fragancia seleccionada|consulta la descripción/i.test(savedDesc))?(descriptionsByName[p.name]||savedDesc):savedDesc;
+  const desc=(!savedDesc.trim()||! /familia olfativa\s*:/i.test(savedDesc)||/fragancia seleccionada|consulta la descripción/i.test(savedDesc))?(descriptionsByName[p.name]||savedDesc):savedDesc;
   const family=(desc.match(/Familia olfativa:\s*([^.]*)/i)||[])[1]||p.family||"Familia olfativa no indicada";
   const salida=(desc.match(/Salida:\s*([^.]*)/i)||[])[1]||"";
   const corazon=(desc.match(/Corazón:\s*([^.]*)/i)||[])[1]||"";
