@@ -1,13 +1,14 @@
 # Lux_off — tienda de perfumes
 
-Sitio estático para GitHub Pages. Incluye catálogo de demostración, carrito y formularios que preparan un mensaje para WhatsApp.
+Sitio estático para GitHub Pages con catálogo conectado a Supabase, carrito y flujo de pedidos/reservas que prepara un mensaje de seguimiento para WhatsApp.
 
 ## Estado actual
 - `index.html`: página inicial de la tienda, diseño negro y dorado, catálogo demostrativo, carrito y solicitud de perfume.
-- `supabase-schema.sql`: esquema inicial de base de datos para inventario compartido, reservas y acciones administrativas.
+- `supabase-schema.sql`: esquema inicial de base de datos.
+- `supabase-orders-migration.sql`: migración para alinear columnas de productos y conectar pedidos, reservas, confirmación/cancelación y panel administrativo.
 - WhatsApp de atención: 951 203 8764.
 
-**Importante:** el inventario que se ve en la página inicial es demostrativo y no se reserva de forma compartida. El panel de administración todavía requiere integración con Supabase. No uses la tienda para ventas reales hasta configurar y probar el backend. No introduzcas contraseñas reales en el panel de demostración.
+**Importante:** el flujo de pedidos requiere ejecutar `supabase-orders-migration.sql` en el proyecto Supabase correcto y verificar que el usuario administrador esté en `public.admin_users`. La reserva no se confirma como venta hasta que el administrador pulse “Confirmar venta”. Prueba el flujo completo antes de usarlo con clientes reales.
 
 ## Publicar en GitHub Pages
 1. Abre Settings → Pages.
@@ -17,10 +18,11 @@ Sitio estático para GitHub Pages. Incluye catálogo de demostración, carrito y
 
 ## Configuración de Supabase
 1. Crea un proyecto en https://supabase.com/.
-2. En SQL Editor crea una consulta nueva, pega todo `supabase-schema.sql` y ejecútala.
-3. En Authentication → Users crea el usuario administrador y copia su UUID.
-4. Ejecuta en SQL Editor: `insert into public.admin_users(user_id) values ('UUID-DEL-USUARIO');` sustituyendo el texto por el UUID real.
-5. La integración frontend aún debe conectarse al Project URL y a la clave anon/public. Nunca expongas la clave service_role.
-6. Prueba reservas, cancelación y confirmación antes de usar el inventario real.
+2. En SQL Editor ejecuta el esquema inicial `supabase-schema.sql` si todavía no lo habías aplicado.
+3. Después, abre `supabase-orders-migration.sql`, copia todo su contenido en una consulta nueva del SQL Editor y ejecútalo.
+4. En Authentication → Users confirma que existe tu usuario administrador y copia su UUID.
+5. Si tu usuario no se copió desde `public.lux_admins`, ejecuta en SQL Editor: `insert into public.admin_users(user_id) values ('UUID-DEL-USUARIO') on conflict do nothing;` sustituyendo el texto por el UUID real.
+6. La página usa Project URL y una clave publicable. Nunca expongas la clave service_role.
+7. Prueba una reserva, la confirmación y la cancelación antes de usar el inventario real.
 
 No se procesan pagos en línea. La venta se confirma directamente por WhatsApp.
