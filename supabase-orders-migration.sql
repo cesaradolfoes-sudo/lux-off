@@ -37,6 +37,17 @@ create table if not exists public.order_items (
   unit_price numeric(12,2) not null check (unit_price > 0)
 );
 
+-- Compatibilidad: si una configuración anterior usaba public.lux_admins(user_id),
+-- copia esos permisos al nombre que utiliza este esquema.
+do $
+begin
+  if to_regclass('public.lux_admins') is not null
+     and exists (select 1 from information_schema.columns
+                 where table_schema='public' and table_name='lux_admins' and column_name='user_id') then
+    execute 'insert into public.admin_users(user_id) select user_id from public.lux_admins on conflict (user_id) do nothing';
+  end if;
+end $;
+
 alter table public.products enable row level security;
 alter table public.admin_users enable row level security;
 alter table public.orders enable row level security;
