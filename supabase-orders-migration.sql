@@ -57,11 +57,25 @@ drop policy if exists "Public can read active products" on public.products;
 create policy "Public can read active products"
   on public.products for select to anon, authenticated using (active = true);
 
+-- La comprobación de administrador corre con permisos controlados para que
+-- el navegador no necesite permisos directos de lectura sobre admin_users.
+create or replace function public.is_lux_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select exists(select 1 from public.admin_users a where a.user_id = auth.uid());
+$;
+revoke all on function public.is_lux_admin() from public;
+grant execute on function public.is_lux_admin() to authenticated;
+
 drop policy if exists "Admins can manage products" on public.products;
 create policy "Admins can manage products"
   on public.products for all to authenticated
-  using (exists(select 1 from public.admin_users a where a.user_id = auth.uid()))
-  with check (exists(select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (public.is_lux_admin())
+  with check (public.is_lux_admin());
 
 revoke all on public.orders from anon, authenticated;
 revoke all on public.order_items from anon, authenticated;
